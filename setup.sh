@@ -25,7 +25,7 @@ mysql -u root -e "GRANT ALL PRIVILEGES ON inventory_db.* TO 'app_user'@'localhos
 mysql -u root -e "FLUSH PRIVILEGES;"
 
 mkdir -p /opt/mywebapp
-cp -r /home/student/mywebapp/* /opt/mywebapp/
+cp -r $(pwd)/* /opt/mywebapp/
 chown -R app:app /opt/mywebapp
 cd /opt/mywebapp
 python3 -m venv venv
@@ -80,6 +80,6 @@ systemctl enable nginx
 firewall-cmd --add-port=80/tcp --permanent
 firewall-cmd --reload
 
-echo "14" > /home/student/gradebook
+echo "14" > "$HOME/gradebook"
 
 usermod -L loneliness
