@@ -80,3 +80,18 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+  deploy:
+      name: Deploy and Verify
+      needs: build-and-push
+      runs-on: self-hosted
+      if: startsWith(github.ref, 'refs/tags/') 
+
+      steps:
+        - name: Deploy application to Target
+          run: ssh -o StrictHostKeyChecking=no student@192.168.56.101 "bash ~/deploy.sh"
+
+        - name: Verify Application Docker (Port 5000)
+          run: curl -f http://192.168.56.101:5000/ || exit 1
+
+        - name: Verify Nginx (Port 80)
+          run: curl -f http://192.168.56.101/ || exit 1
